@@ -1,0 +1,74 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "3.3.0"
+    id "io.spring.dependency-management" version "1.1.5"
+    id "org.openapi.generator" version "7.6.0"
+    id "io.freefair.lombok" version "8.6"
+}
+
+jar {
+    enabled = false
+}
+
+group 'com.tester.stress'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+
+    mavenLocal()
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$projectDir/src/main/resources/openapi/open-api.yaml".toString()
+    outputDir = "$projectDir/build/generated".toString()
+    configFile = "$projectDir/src/main/resources/openapi/open-api-config.json".toString()
+    modelNameSuffix = "DTO"
+    globalProperties = [models: "", apis: "", supportingFiles: "ApiUtil.java"]
+}
+
+// Configure compile task dependency and source
+compileJava.dependsOn tasks.openApiGenerate
+sourceSets.main.java.srcDir "$buildDir/generated/src/main/java"
+
+
+dependencies {
+    // Rest resources
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation("org.springframework.boot:spring-boot-starter-undertow")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation('org.springframework.boot:spring-boot-starter-activemq')
+
+    //Swagger / OpenAPI
+    implementation('io.swagger:swagger-annotations:1.6.14')
+    implementation('org.openapitools:jackson-databind-nullable:0.2.6')
+    implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.2'
+    implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.22'
+
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+}

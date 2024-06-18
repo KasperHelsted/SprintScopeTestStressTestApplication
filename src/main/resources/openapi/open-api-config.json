@@ -1,0 +1,10 @@
+{
+  "library" : "spring-boot",
+  "apiPackage" : "com.tester.stress.inbound.rest",
+  "modelPackage" : "com.tester.stress.inbound.rest.dto",
+  "useSpringBoot3" : true,
+  "useJakartaEe": true,
+  "useTags" : true,
+  "delegatePattern" : true,
+  "useBeanValidation" : false
+}

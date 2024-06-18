@@ -1,0 +1,33 @@
+openapi: 3.0.1
+info:
+  title: Test API
+  version: 1.0.0
+paths:
+  /status:
+    get:
+      tags:
+        - Status
+      parameters:
+        - name: test-param
+          schema:
+            type: string
+          in: header
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusObject'
+          description: OK
+      operationId: getQueueDepth
+components:
+  schemas:
+    StatusObject:
+      type: object
+      properties:
+        clientIP:
+          type: string
+tags:
+  - name: Status
+    description: ''

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: stresser
+  profiles:
+    active: local
+
+management:
+  server:
+    port: 8081
+  security.enabled: false
+  info.git.mode: full
+  endpoint.prometheus.enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+spring.activemq.broker-url: tcp://192.168.136.179:61616
+spring.activemq.user: admin
+spring.activemq.password: admin
